@@ -1,0 +1,47 @@
+body{
+	margin: 0;
+}
+
+header{
+	background-color: red;
+	text-align: center;
+	font-size: 4em;
+}
+
+nav{
+	background-color: yellow;
+	width: 20%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+nav ul{
+	margin: 0;
+}
+
+main{
+	background-color: silver;
+	width: 80%;
+	display: inline-block;
+	border-left: 3px solid black;
+	box-sizing: border-box;
+	vertical-align: top;
+}
+
+main h1{
+	margin: 0;
+}
+
+main p{
+	margin: 0;
+}
+
+footer{
+	background-color: lime;
+	text-align: center;
+	font-style: italic;
+}
+
+footer p{
+	margin: 0;
+}
