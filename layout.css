@@ -43,3 +43,30 @@ main{
 footer{
 	background-color: brown;
 }
+
+/* To style the menu. */
+nav ul{
+	list-style-type: none;
+	padding: 5px;
+	margin: 0;
+}
+
+nav ul li{
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+nav ul li:last-child{
+	margin-bottom: 0;
+}
+
+nav ul li a{
+	background-color: silver;
+	display: block;
+	text-decoration: none;
+	color: black;
+}
+
+nav ul li a:hover{
+	background-color: purple;
+}
