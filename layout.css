@@ -1,0 +1,45 @@
+@media (min-width: 600px) {
+
+	body{
+		display: grid;
+		grid-template-rows: auto auto auto;
+		grid-template-columns: 200px 1fr;
+	}
+
+	header{
+		grid-row: 1 / span 1;
+		grid-column: 1 / span 2;
+	}
+
+	nav{
+		grid-row: 2 / span 1;
+		grid-column: 1 / span 1;
+	}
+
+	main{
+		grid-row: 2 / span 1;
+		grid-column: 2 / span 1;
+	}
+
+	footer{
+		grid-row: 3 / span 1;
+		grid-column: 1 / span 2;
+	}
+
+}
+
+header{
+	background-color: red;
+}
+
+nav{
+	background-color: yellow;
+}
+
+main{
+	background-color: aqua;
+}
+
+footer{
+	background-color: brown;
+}
