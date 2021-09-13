@@ -1,16 +1,15 @@
 <h1>Products!</h1>
 
-<article>
-	<h2>Book</h2>
-	<p>Bye a good book.</p>
-</article>
-
-<article>
-	<h2>Movie</h2>
-	<p>Bye a good movie.</p>
-</article>
-
-<article>
-	<h2>Computer</h2>
-	<p>Bye a good computer.</p>
-</article>
+{{#if products.length}}
+	
+	{{#each products}}
+		<article>
+			<h2>{{name}}</h2>
+			<p>{{description}}</p>
+			<a href="/products/{{id}}">Read more</a>
+		</article>
+	{{/each}}
+	
+{{else}}
+	<p>All products are sold!</p>
+{{/if}}
