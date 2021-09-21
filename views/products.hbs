@@ -1,15 +1,21 @@
 <h1>Products!</h1>
 
-{{#if products.length}}
-	
-	{{#each products}}
-		<article>
-			<h2>{{name}}</h2>
-			<p>{{description}}</p>
-			<a href="/products/{{id}}">Read more</a>
-		</article>
-	{{/each}}
-	
+{{#if hasDatabaseError}}
+	<p>Couldn't fetch the products at the moment, try again later.</p>
 {{else}}
-	<p>All products are sold!</p>
+	
+	{{#if products.length}}
+		
+		{{#each products}}
+			<article>
+				<h2>{{name}}</h2>
+				<p>{{description}}</p>
+				<a href="/products/{{id}}">Read more</a>
+			</article>
+		{{/each}}
+		
+	{{else}}
+		<p>All products are sold!</p>
+	{{/if}}
+	
 {{/if}}
