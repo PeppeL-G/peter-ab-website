@@ -16,6 +16,10 @@ const app = express()
 
 app.use(express.static('static'))
 
+app.use(express.urlencoded({
+	extended: false
+}))
+
 app.engine('hbs', expressHandlebars({
 	defaultLayout: 'main.hbs'
 }))
@@ -49,6 +53,30 @@ app.get('/products', function(request, response){
 			response.render('products.hbs', model)
 			
 		}
+		
+	})
+	
+})
+
+app.get('/products/create', function(request, response){
+	response.render('create-product.hbs')
+})
+
+app.post('/products/create', function(request, response){
+	
+	const name = request.body.name
+	const description = request.body.description
+	
+	// TODO: Add validation and display error messages.
+	
+	const query = "INSERT INTO products (name, description) VALUES (?, ?)"
+	const values = [name, description]
+	
+	db.run(query, values, function(error){
+		
+		const id = this.lastID
+		
+		response.redirect('/products/'+id)
 		
 	})
 	
