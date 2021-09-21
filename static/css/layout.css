@@ -4,6 +4,9 @@
 		display: grid;
 		grid-template-rows: auto auto auto;
 		grid-template-columns: 200px 1fr;
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 8px;
 	}
 
 	header{
@@ -14,6 +17,8 @@
 	nav{
 		grid-row: 2 / span 1;
 		grid-column: 1 / span 1;
+		border-right: 3px solid black;
+		border-bottom: none;
 	}
 
 	main{
@@ -28,20 +33,35 @@
 
 }
 
+@media (max-width: 599px) {
+	
+	header{
+		border-bottom: 3px solid black;
+	}
+	
+	nav{
+		border-bottom: 3px solid black;
+	}
+	
+}
+
 header{
-	background-color: red;
+	border-bottom: 3px solid;
+	text-align: center;
+	font-size: 300%;
+	text-decoration: underline;
 }
 
 nav{
-	background-color: yellow;
 }
 
 main{
-	background-color: aqua;
+	padding: 4px;
 }
 
 footer{
-	background-color: brown;
+	text-align: center;
+	border-top: 3px solid black;
 }
 
 /* To style the menu. */
@@ -68,5 +88,5 @@ nav ul li a{
 }
 
 nav ul li a:hover{
-	background-color: purple;
+	background-color: gray;
 }
