@@ -1,6 +1,7 @@
 {{#if product}}
 	<h1>{{product.name}}</h1>
 	<p>{{product.description}}</p>
+	<a href="/products/{{product.id}}/update">Update</a>
 {{else}}
 	<h1>Not found</h1>
 	<p>The product doesn't exist.</p>

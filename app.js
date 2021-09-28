@@ -130,20 +130,85 @@ app.post('/products/create', function(request, response){
 	
 })
 
-// /products/3
-app.get('/products/:id', function(request, response){
-	
-	const id = request.params.id
+function getProductById(id, callback){
 	
 	const query = "SELECT * FROM products WHERE id = ? LIMIT 1"
 	const values = [id]
 	
 	db.get(query, values, function(error, product){
+		callback(error, product)
+	})
+	
+}
+
+// /products/3
+app.get('/products/:id', function(request, response){
+	
+	const id = request.params.id
+	
+	getProductById(id, function(error, product){
+		// TODO: Handle error.
 		const model = {
 			product
 		}
 		response.render('product.hbs', model)
 	})
+	
+})
+
+app.get('/products/:id/update', function(request, response){
+	
+	const id = request.params.id
+	
+	getProductById(id, function(error, product){
+		
+		// TODO: Handle error.
+		
+		const model = {
+			product
+		}
+		
+		response.render('update-product.hbs', model)
+		
+	})
+	
+})
+
+app.post('/products/:id/update', function(request, response){
+	
+	const id = request.params.id
+	const name = request.body.name
+	const description = request.body.description
+	
+	const errors = getValidationErrors(name, description)
+	
+	if(errors.length == 0){
+		
+		const query = "UPDATE products SET name = ?, description = ? WHERE id = ?"
+		const values = [name, description, id]
+		
+		db.run(query, values, function(error){
+			
+			// TODO: Handle error.
+			
+			response.redirect('/products/'+id)
+			
+		})
+		
+	}else{
+		
+		const model = {
+			errors,
+			product: {
+				id,
+				name,
+				description
+			}
+		}
+		
+		response.render('update-product.hbs', model)
+		
+	}
 	
 })
 
