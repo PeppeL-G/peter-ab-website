@@ -2,6 +2,25 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const sqlite = require('sqlite3')
 
+const MIN_NAME_LENGTH = 3
+const MIN_DESCRIPTION_LENGTH = 5
+
+function getValidationErrors(name, description){
+	
+	const validationErrors = []
+	
+	if(name.length < MIN_NAME_LENGTH){
+		validationErrors.push("The name needs to be at least "+MIN_NAME_LENGTH+" characters.")
+	}
+	
+	if(description.length < MIN_DESCRIPTION_LENGTH){
+		validationErrors.push("The description needs to be at least "+MIN_DESCRIPTION_LENGTH+" characters.")
+	}
+	
+	return validationErrors
+	
+}
+
 const db = new sqlite.Database('peter-ab.db')
 
 db.run(`
@@ -67,18 +86,47 @@ app.post('/products/create', function(request, response){
 	const name = request.body.name
 	const description = request.body.description
 	
-	// TODO: Add validation and display error messages.
+	const errors = getValidationErrors(name, description)
 	
-	const query = "INSERT INTO products (name, description) VALUES (?, ?)"
-	const values = [name, description]
-	
-	db.run(query, values, function(error){
+	if(errors.length == 0){
 		
-		const id = this.lastID
+		const query = "INSERT INTO products (name, description) VALUES (?, ?)"
+		const values = [name, description]
 		
-		response.redirect('/products/'+id)
+		db.run(query, values, function(error){
+			
+			if(error){
+				
+				errors.push("Internal server error.")
+				
+				const model = {
+					errors,
+					name,
+					description
+				}
+				
+				response.render('create-product.hbs', model)
+				
+			}else{
+				
+				const id = this.lastID
+				response.redirect('/products/'+id)
+				
+			}
+			
+		})
 		
-	})
+	}else{
+		
+		const model = {
+			errors,
+			name,
+			description
+		}
+		
+		response.render('create-product.hbs', model)
+		
+	}
 	
 })
 
