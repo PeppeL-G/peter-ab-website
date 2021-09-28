@@ -212,4 +212,39 @@ app.post('/products/:id/update', function(request, response){
 	
 })
 
+app.get('/products/:id/delete', function(request, response){
+	
+	const id = request.params.id
+	
+	getProductById(id, function(error, product){
+		
+		// TODO: Handle error.
+		
+		const model = {
+			product
+		}
+		
+		response.render('delete-product.hbs', model)
+		
+	})
+	
+})
+
+app.post('/products/:id/delete', function(request, response){
+	
+	const id = request.params.id
+	
+	const query = "DELETE FROM products WHERE id = ?"
+	const values = [id]
+	
+	db.run(query, values, function(error){
+		
+		// TODO: Handle error.
+		
+		response.redirect('/products')
+		
+	})
+	
+})
+
 app.listen(8080)
