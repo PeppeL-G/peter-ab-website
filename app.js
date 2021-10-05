@@ -47,15 +47,15 @@ app.use(expressSession({
 	// TODO: Save the sessions in a session store.
 }))
 
-app.engine('hbs', expressHandlebars({
-	defaultLayout: 'main.hbs'
-}))
-
 app.use(function(request, response, next){
 	// Make the session available to all views.
 	response.locals.session = request.session
 	next()
 })
+
+app.engine('hbs', expressHandlebars({
+	defaultLayout: 'main.hbs'
+}))
 
 app.get('/', function(request, response){
 	response.render('start.hbs')
