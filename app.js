@@ -2,25 +2,7 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const sqlite = require('sqlite3')
 const expressSession = require('express-session')
-
-const MIN_NAME_LENGTH = 3
-const MIN_DESCRIPTION_LENGTH = 5
-
-function getValidationErrors(name, description){
-	
-	const validationErrors = []
-	
-	if(name.length < MIN_NAME_LENGTH){
-		validationErrors.push("The name needs to be at least "+MIN_NAME_LENGTH+" characters.")
-	}
-	
-	if(description.length < MIN_DESCRIPTION_LENGTH){
-		validationErrors.push("The description needs to be at least "+MIN_DESCRIPTION_LENGTH+" characters.")
-	}
-	
-	return validationErrors
-	
-}
+const validators = require('./validators')
 
 const db = new sqlite.Database('peter-ab.db')
 
@@ -100,7 +82,7 @@ app.post('/products/create', function(request, response){
 	const name = request.body.name
 	const description = request.body.description
 	
-	const errors = getValidationErrors(name, description)
+	const errors = validators.getValidationErrorsForProduct(name, description)
 	
 	if(!request.session.isLoggedIn){
 		errors.push("Not logged in.")
@@ -198,7 +180,7 @@ app.post('/products/:id/update', function(request, response){
 	const name = request.body.name
 	const description = request.body.description
 	
-	const errors = getValidationErrors(name, description)
+	const errors = validators.getValidationErrorsForProduct(name, description)
 	
 	if(!request.session.isLoggedIn){
 		errors.push("Not logged in.")
