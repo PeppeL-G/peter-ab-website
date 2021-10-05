@@ -1,18 +1,8 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
-const sqlite = require('sqlite3')
 const expressSession = require('express-session')
 const validators = require('./validators')
-
-const db = new sqlite.Database('peter-ab.db')
-
-db.run(`
-	CREATE TABLE IF NOT EXISTS products (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		name TEXT,
-		description TEXT
-	)
-`)
+const db = require('./database')
 
 const app = express()
 
@@ -49,7 +39,7 @@ app.get('/about', function(request, response){
 
 app.get('/products', function(request, response){
 	
-	db.all("SELECT * FROM products", function(error, products){
+	db.getAllProducts(function(error, products){
 		
 		if(error){
 			
@@ -90,10 +80,7 @@ app.post('/products/create', function(request, response){
 	
 	if(errors.length == 0){
 		
-		const query = "INSERT INTO products (name, description) VALUES (?, ?)"
-		const values = [name, description]
-		
-		db.run(query, values, function(error){
+		db.createProduct(name, description, function(error, productId){
 			
 			if(error){
 				
@@ -109,8 +96,7 @@ app.post('/products/create', function(request, response){
 				
 			}else{
 				
-				const id = this.lastID
-				response.redirect('/products/'+id)
+				response.redirect('/products/'+productId)
 				
 			}
 			
@@ -130,23 +116,12 @@ app.post('/products/create', function(request, response){
 	
 })
 
-function getProductById(id, callback){
-	
-	const query = "SELECT * FROM products WHERE id = ? LIMIT 1"
-	const values = [id]
-	
-	db.get(query, values, function(error, product){
-		callback(error, product)
-	})
-	
-}
-
 // /products/3
 app.get('/products/:id', function(request, response){
 	
 	const id = request.params.id
 	
-	getProductById(id, function(error, product){
+	db.getProductById(id, function(error, product){
 		// TODO: Handle error.
 		const model = {
 			product
@@ -160,7 +135,7 @@ app.get('/products/:id/update', function(request, response){
 	
 	const id = request.params.id
 	
-	getProductById(id, function(error, product){
+	db.getProductById(id, function(error, product){
 		
 		// TODO: Handle error.
 		
@@ -188,10 +163,7 @@ app.post('/products/:id/update', function(request, response){
 	
 	if(errors.length == 0){
 		
-		const query = "UPDATE products SET name = ?, description = ? WHERE id = ?"
-		const values = [name, description, id]
-		
-		db.run(query, values, function(error){
+		db.updateProductById(id, name, description, function(error){
 			
 			// TODO: Handle error.
 			
@@ -220,7 +192,7 @@ app.get('/products/:id/delete', function(request, response){
 	
 	const id = request.params.id
 	
-	getProductById(id, function(error, product){
+	db.getProductById(id, function(error, product){
 		
 		// TODO: Handle error.
 		
@@ -241,10 +213,7 @@ app.post('/products/:id/delete', function(request, response){
 	// TODO: Check if the user is logged in, and only carry
 	// out the request if the user is.
 	
-	const query = "DELETE FROM products WHERE id = ?"
-	const values = [id]
-	
-	db.run(query, values, function(error){
+	db.deleteProductById(id, function(error){
 		
 		// TODO: Handle error.
 		
